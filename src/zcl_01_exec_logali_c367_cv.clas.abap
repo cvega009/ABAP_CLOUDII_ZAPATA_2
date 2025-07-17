@@ -12,10 +12,21 @@ ENDCLASS.
 CLASS zcl_01_exec_logali_c367_cv IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
-*3.1. Class-relevant Local Types
-    DATA(go_components) = NEW zcl_43_components_lgl_c367_cv(  ).
-    go_components->get_first( IMPORTING ev_first = DATA(gv_first) ).
+    DATA(lo_manage_cntr) = NEW zcl_46_manage_cntr_lgl_c367_cv(  ).
+*    DATA lx_auth TYPE REF TO zcx_45_auth_lgl_c367_cv.
 
+    TRY.
+        lo_manage_cntr->check_user( sy-uname ).
+      CATCH zcx_45_auth_lgl_c367_cv INTO DATA(lx_auth).
+        "handle exception
+        out->write( lx_auth->get_text(  ) ).
+    ENDTRY.
+
+*-------------------------------------------------------------------
+**3.1. Class-relevant Local Types
+*    DATA(go_components) = NEW zcl_43_components_lgl_c367_cv(  ).
+*    go_components->get_first( IMPORTING ev_first = DATA(gv_first) ).
+*
 *-------------------------------------------------------------------
 **    "2.9. Manejar eventos para todas las instancias de la clase
 **    DATA(go_north_building) = NEW zcl_41_building_lgl_cv(  ).
