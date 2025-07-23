@@ -12,44 +12,112 @@ ENDCLASS.
 CLASS zcl_01_exec_logali_c367_cv IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
-    DATA(lo_manage_cntr) = NEW zcl_46_manage_cntr_lgl_c367_cv(  ).
-*    DATA lx_auth TYPE REF TO zcx_45_auth_lgl_c367_cv.
 
-
-    DATA: lv_result TYPE i,
-          lv_num1   TYPE i VALUE 10,
-          lv_num2   TYPE i.
-
+    DATA(lo_execution) = NEW zcx_54_excecution_lgl_c367_cv(  ).
     TRY.
-*        lo_manage_cntr->check_user( sy-uname ).
-
         TRY.
-            lv_result = lv_num1 + lv_num2.
-            lv_result = lv_num1 / lv_num2.
-            lv_result = lv_num1 - lv_num2.
+            TRY.
+                lo_execution->raise_exception_1(  ).
 
-          CATCH zcx_45_auth_lgl_c367_cv INTO DATA(lx_auth).
-            "handle exception
-            out->write( lx_auth->get_text(  ) ).
+              CATCH zcx_51_exception1_lgl_c367_cv INTO DATA(lx_exception1).
+                lo_execution->raise_exception_2( io_previous = lx_exception1 ).
 
-          CATCH cx_a4c_bc_exception.
+            ENDTRY.
 
-          CLEANUP.
-            out->write( |Cleanup 1...Result:{ lv_result }| ).
-
+          CATCH zcx_52_exception2_lgl_c367_cv INTO DATA(lx_exception2).
+            lo_execution->raise_exception_3( io_previous = lx_exception2 ).
         ENDTRY.
 
-      CATCH cx_sy_zerodivide INTO DATA(lx_zerodivide).
-        out->write( lx_zerodivide->get_text(  ) ).
+      CATCH zcx_53_exception3_lgl_c367_cv INTO DATA(lx_exception3).
 
-        lv_num2 = 2.
-        RETRY.
-      CLEANUP.
-        out->write( |Cleanup 2...Result:{ lv_result }| ).
+        out->write( |{ lx_exception3->get_text(  ) }{ cl_abap_char_utilities=>newline }| ).
+
+        IF lx_exception3->previous IS BOUND.
+          out->write( |{ lx_exception3->previous->get_text( ) }\n| ).
+        ENDIF.
+
+        IF lx_exception3->previous->previous IS BOUND.
+          out->write( |{ lx_exception3->previous->previous->get_text( ) }\n| ).
+
+        ENDIF.
+
+        IF lx_exception3->previous->previous->previous IS BOUND.
+          out->write( |{ lx_exception3->previous->previous->previous->get_text( ) }\n| ).
+        ENDIF.
 
     ENDTRY.
 
-    out->write( |FINISH: { lv_result }| ).
+***-----------------------------------------------------------------------------------
+***-----------------------------------------------------------------------------------
+**    DATA(lo_atm) = NEW zcl_50_atm_lgl_c367_cv( ).
+***-----------------------------------------------------------------------------------
+***1. Expired Credit Card
+**    out->write( 'Use Case: 1. Expired Credit Card').
+**
+**    out->write( lo_atm->withdraw_money(
+**                  iv_card            = '1111 2222 3333 4444'
+**                  iv_amount          = 30
+***                  iv_savings_account =
+**                ) ).
+**
+***-----------------------------------------------------------------------------------
+***2. Insufficient balance in the current account
+**    out->write( 'Use Case: 2. Insufficient balance in the current account').
+**
+**    out->write( lo_atm->withdraw_money(
+**                  iv_card            = '1111 2222 3333 5555'
+**                  iv_amount          = 100
+***                  iv_savings_account =
+**                ) ).
+**
+***-----------------------------------------------------------------------------------
+***3. Withdraw money from the savings account
+**    out->write( 'Use Case: 3. Withdraw money from the savings account').
+**    out->write( lo_atm->withdraw_money(
+**                  iv_card            = '1111 2222 3333 5555'
+**                  iv_amount          = 100
+**                  iv_savings_account = abap_true
+**                ) ).
+***-------------------------------------------------------------------
+***-------------------------------------------------------------------
+**    DATA(lo_manage_cntr) = NEW zcl_46_manage_cntr_lgl_c367_cv(  ).
+***    DATA lx_auth TYPE REF TO zcx_45_auth_lgl_c367_cv.
+**
+**
+**    DATA: lv_result TYPE i,
+**          lv_num1   TYPE i VALUE 10,
+**          lv_num2   TYPE i.
+**
+**    TRY.
+***        lo_manage_cntr->check_user( sy-uname ).
+**
+**        TRY.
+**            lv_result = lv_num1 + lv_num2.
+**            lv_result = lv_num1 / lv_num2.
+**            lv_result = lv_num1 - lv_num2.
+**
+**          CATCH zcx_45_auth_lgl_c367_cv INTO DATA(lx_auth).
+**            "handle exception
+**            out->write( lx_auth->get_text(  ) ).
+**
+**          CATCH cx_a4c_bc_exception.
+**
+**          CLEANUP.
+**            out->write( |Cleanup 1...Result:{ lv_result }| ).
+**
+**        ENDTRY.
+**
+**      CATCH cx_sy_zerodivide INTO DATA(lx_zerodivide).
+**        out->write( lx_zerodivide->get_text(  ) ).
+**
+**        lv_num2 = 2.
+**        RETRY.
+**      CLEANUP.
+**        out->write( |Cleanup 2...Result:{ lv_result }| ).
+**
+**    ENDTRY.
+**
+**    out->write( |FINISH: { lv_result }| ).
 
 *-------------------------------------------------------------------
 **3.1. Class-relevant Local Types

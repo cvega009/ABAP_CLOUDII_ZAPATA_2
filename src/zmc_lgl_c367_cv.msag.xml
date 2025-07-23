@@ -20,6 +20,18 @@
      <MSGNR>002</MSGNR>
      <TEXT>No access to the resource &amp;1.</TEXT>
     </T100>
+    <T100>
+     <SPRSL>S</SPRSL>
+     <ARBGB>ZMC_LGL_C367_CV</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>You card is expired and retained by the ATM</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>S</SPRSL>
+     <ARBGB>ZMC_LGL_C367_CV</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Insufficient balance in your account</TEXT>
+    </T100>
    </T100>
   </asx:values>
  </asx:abap>
