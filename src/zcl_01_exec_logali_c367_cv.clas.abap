@@ -15,12 +15,41 @@ CLASS zcl_01_exec_logali_c367_cv IMPLEMENTATION.
     DATA(lo_manage_cntr) = NEW zcl_46_manage_cntr_lgl_c367_cv(  ).
 *    DATA lx_auth TYPE REF TO zcx_45_auth_lgl_c367_cv.
 
+
+    DATA: lv_result TYPE i,
+          lv_num1   TYPE i VALUE 10,
+          lv_num2   TYPE i.
+
     TRY.
-        lo_manage_cntr->check_user( sy-uname ).
-      CATCH zcx_45_auth_lgl_c367_cv INTO DATA(lx_auth).
-        "handle exception
-        out->write( lx_auth->get_text(  ) ).
+*        lo_manage_cntr->check_user( sy-uname ).
+
+        TRY.
+            lv_result = lv_num1 + lv_num2.
+            lv_result = lv_num1 / lv_num2.
+            lv_result = lv_num1 - lv_num2.
+
+          CATCH zcx_45_auth_lgl_c367_cv INTO DATA(lx_auth).
+            "handle exception
+            out->write( lx_auth->get_text(  ) ).
+
+          CATCH cx_a4c_bc_exception.
+
+          CLEANUP.
+            out->write( |Cleanup 1...Result:{ lv_result }| ).
+
+        ENDTRY.
+
+      CATCH cx_sy_zerodivide INTO DATA(lx_zerodivide).
+        out->write( lx_zerodivide->get_text(  ) ).
+
+        lv_num2 = 2.
+        RETRY.
+      CLEANUP.
+        out->write( |Cleanup 2...Result:{ lv_result }| ).
+
     ENDTRY.
+
+    out->write( |FINISH: { lv_result }| ).
 
 *-------------------------------------------------------------------
 **3.1. Class-relevant Local Types
