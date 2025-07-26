@@ -12,41 +12,71 @@ ENDCLASS.
 CLASS zcl_01_exec_logali_c367_cv IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
+***-----------------------------------------------------------------------------------
+***-----------------------------------------------------------------------------------
 
-    DATA(lo_execution) = NEW zcx_54_excecution_lgl_c367_cv(  ).
+    DATA: gv_resultado TYPE i,
+          gx_exception TYPE REF TO cx_root.
+
     TRY.
-        TRY.
-            TRY.
-                lo_execution->raise_exception_1(  ).
-
-              CATCH zcx_51_exception1_lgl_c367_cv INTO DATA(lx_exception1).
-                lo_execution->raise_exception_2( io_previous = lx_exception1 ).
-
-            ENDTRY.
-
-          CATCH zcx_52_exception2_lgl_c367_cv INTO DATA(lx_exception2).
-            lo_execution->raise_exception_3( io_previous = lx_exception2 ).
-        ENDTRY.
-
-      CATCH zcx_53_exception3_lgl_c367_cv INTO DATA(lx_exception3).
-
-        out->write( |{ lx_exception3->get_text(  ) }{ cl_abap_char_utilities=>newline }| ).
-
-        IF lx_exception3->previous IS BOUND.
-          out->write( |{ lx_exception3->previous->get_text( ) }\n| ).
-        ENDIF.
-
-        IF lx_exception3->previous->previous IS BOUND.
-          out->write( |{ lx_exception3->previous->previous->get_text( ) }\n| ).
-
-        ENDIF.
-
-        IF lx_exception3->previous->previous->previous IS BOUND.
-          out->write( |{ lx_exception3->previous->previous->previous->get_text( ) }\n| ).
-        ENDIF.
-
+        gv_resultado = 8 / 0.
+      CATCH cx_sy_zerodivide INTO gx_exception.
+        out->write( 'Exception handled').
+*        RETRY.
     ENDTRY.
 
+
+***-----------------------------------------------------------------------------------
+***-----------------------------------------------------------------------------------
+*    DATA(lo_cut) = NEW zcl_57_test_inj_lgl_c367_cv(  ).
+*    lo_cut->get_customer( IMPORTING es_customer = DATA(ls_customer) ).
+*    out->write( |{ ls_customer-customer_id }-{ ls_customer-country_code }| ).
+
+***-----------------------------------------------------------------------------------
+***-----------------------------------------------------------------------------------
+**    DATA(lo_business_pr) = NEW zcl_55_business_pr_lgl_c367_cv(  ).
+**
+**    lo_business_pr->get_factorial( EXPORTING iv_number     = 4
+**                                   IMPORTING  ev_factorial = DATA(lv_factorial)  ).
+**
+**    out->write( lv_factorial ).
+**
+***-----------------------------------------------------------------------------------
+***-----------------------------------------------------------------------------------
+*    DATA(lo_execution) = NEW zcx_54_excecution_lgl_c367_cv(  ).
+*    TRY.
+*        TRY.
+*            TRY.
+*                lo_execution->raise_exception_1(  ).
+*
+*              CATCH zcx_51_exception1_lgl_c367_cv INTO DATA(lx_exception1).
+*                lo_execution->raise_exception_2( io_previous = lx_exception1 ).
+*
+*            ENDTRY.
+*
+*          CATCH zcx_52_exception2_lgl_c367_cv INTO DATA(lx_exception2).
+*            lo_execution->raise_exception_3( io_previous = lx_exception2 ).
+*        ENDTRY.
+*
+*      CATCH zcx_53_exception3_lgl_c367_cv INTO DATA(lx_exception3).
+*
+*        out->write( |{ lx_exception3->get_text(  ) }{ cl_abap_char_utilities=>newline }| ).
+*
+*        IF lx_exception3->previous IS BOUND.
+*          out->write( |{ lx_exception3->previous->get_text( ) }\n| ).
+*        ENDIF.
+*
+*        IF lx_exception3->previous->previous IS BOUND.
+*          out->write( |{ lx_exception3->previous->previous->get_text( ) }\n| ).
+*
+*        ENDIF.
+*
+*        IF lx_exception3->previous->previous->previous IS BOUND.
+*          out->write( |{ lx_exception3->previous->previous->previous->get_text( ) }\n| ).
+*        ENDIF.
+*
+*    ENDTRY.
+*
 ***-----------------------------------------------------------------------------------
 ***-----------------------------------------------------------------------------------
 **    DATA(lo_atm) = NEW zcl_50_atm_lgl_c367_cv( ).
