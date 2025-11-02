@@ -3,7 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DEVC>
-    <CTEXT>Paquete Carlos</CTEXT>
+    <CTEXT>Package - Carlos Vega</CTEXT>
+    <LANGUAGE>S</LANGUAGE>
+    <MASTERLANG>S</MASTERLANG>
    </DEVC>
   </asx:values>
  </asx:abap>
