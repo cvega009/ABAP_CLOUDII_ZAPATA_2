@@ -3,10 +3,10 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZCDS_21_LOG_C367_CV</DDLNAME>
+    <DDLNAME>ZCDS_23_LOG_C367_CV</DDLNAME>
     <DDLANGUAGE>S</DDLANGUAGE>
-    <DDTEXT>Entidad abstracta – Abstract Entity</DDTEXT>
-    <SOURCE_TYPE>A</SOURCE_TYPE>
+    <DDTEXT>Entidad de Jerarquía – Hierarchy</DDTEXT>
+    <SOURCE_TYPE>H</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>
