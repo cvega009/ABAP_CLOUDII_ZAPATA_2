@@ -1,0 +1,8 @@
+@EndUserText.label: 'Impedir Acceso'
+@MappingRole: true
+define role ZAC_LGL_06_C367_CV {
+    grant
+        select on   ZCDS_37_LOG_C367_CV 
+         where false;
+                        
+}

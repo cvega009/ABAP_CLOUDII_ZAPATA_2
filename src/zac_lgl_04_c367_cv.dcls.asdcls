@@ -1,0 +1,11 @@
+@EndUserText.label: 'Aspect PFCG'
+@MappingRole: true
+define role ZAC_LGL_04_C367_CV {
+    grant 
+        select on ZCDS_36_LOG_C367_CV
+                    where
+                       (CarrierId)  = aspect pfcg_auth(ZAOCC367CV, ZAFCC367CV, ACTVT = '03');
+//                       (CarrierId)  = aspect pfcg_auth(ZAOCC367CV, ZAFCC367CV, ACTVT = '03') and
+//                         (CurrencyCode) = aspect pfcg_auth
+//                         CurrencyCode = 'USD';
+}
