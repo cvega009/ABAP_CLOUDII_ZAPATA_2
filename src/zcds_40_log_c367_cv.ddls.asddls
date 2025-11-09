@@ -1,47 +1,30 @@
 @AbapCatalog.viewEnhancementCategory: [#NONE]
-@AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'Country Text'
+@AccessControl.authorizationCheck: #MANDATORY
+@EndUserText.label: 'Acceso Obligatorio'
 @Metadata.ignorePropagatedAnnotations: true
 @ObjectModel.usageType:{
-    serviceQuality: #A,
+    serviceQuality: #X,
     sizeCategory: #S,
-    dataClass: #MASTER
+    dataClass: #MIXED
 }
 
-@ObjectModel.dataCategory: #TEXT
-@ObjectModel.representativeKey: 'Country'
-@ObjectModel.supportedCapabilities: [ #SQL_DATA_SOURCE,
-                                      #CDS_MODELING_DATA_SOURCE,
-                                      #CDS_MODELING_ASSOCIATION_TARGET,
-                                      #LANGUAGE_DEPENDENT_TEXT ]
-
-@Search.searchable: true
-
 define view entity ZCDS_40_LOG_C367_CV
-  as select from zcountry_t_lgl
-
-  association [0..1] to I_Language       as _Languaje on _Languaje.Language = $projection.Languaje
-  association [0..1] to zcds_41_log_c367 as _Country  on _Country.Country = $projection.Country
-
+  as select from /dmo/travel
 {
-      @ObjectModel.foreignKey.association: '_Country'
-  key land1   as Country,
-      @ObjectModel.foreignKey.association: '_Languaje'
-      @Semantics.language: true
-  key spras   as Languaje,
-
-      @Search.fuzzinessThreshold: 0.8
-      @Search.ranking: #HIGH
-      @Search.defaultSearchElement: true
-      @Semantics.text: true
-      landx50 as CountryName,
-
-      landx   as CountryShortName,
-      natio   as NationalityName,
-      natio50 as NationalityLongName,
-
-
-      _Languaje,
-      _Country
-
+  key travel_id     as TravelId,
+      agency_id     as AgencyId,
+      customer_id   as CustomerId,
+      begin_date    as BeginDate,
+      end_date      as EndDate,
+      @Semantics.amount.currencyCode: 'CurrencyCode'
+      booking_fee   as BookingFee,
+      @Semantics.amount.currencyCode: 'CurrencyCode'
+      total_price   as TotalPrice,
+      currency_code as CurrencyCode,
+      description   as Description,
+      status        as Status,
+      createdby     as Createdby,
+      createdat     as Createdat,
+      lastchangedby as Lastchangedby,
+      lastchangedat as Lastchangedat
 }

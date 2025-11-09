@@ -1,0 +1,28 @@
+@EndUserText.label: 'Condiciones Literales Complejas'
+@MappingRole: true
+define role ZAC_LGL_08_C367_CV {
+grant
+        select
+            on
+                ZCDS_39_LOG_C367_CV
+                    where
+                          CustomerId =  '000030'
+                       or CustomerId >  '000030'
+                       or CustomerId >= '000030' 
+                       or CustomerId <  '000030'
+                       or CustomerId <= '000030'
+                       or CustomerId <> '000030'
+                       // CustomerId = '000030' or CustomerId is initial
+                       or CustomerId ?=  '000030' 
+                       or CustomerId is initial
+                       or CustomerId is not initial
+                       or CustomerId is null
+                       or CustomerId is not null
+                       or CustomerId between '000020' and '000030'
+                       or CustomerId not between '000020' and '000030'
+                       or CustomerId like '%2%'
+                       //El último caracter
+                       or CustomerId like '00002_'
+                       ;
+                        
+}
