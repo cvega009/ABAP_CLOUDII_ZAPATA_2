@@ -3,7 +3,7 @@
 {
 "FROM":
 [
-"ZUSERS_C367_CV"
+"/DMO/CARRIER"
 ],
 "ASSOCIATED":
 [],
@@ -12,7 +12,9 @@
 "ANNO_REF":
 [],
 "SCALAR_FUNCTION":
-[],
+[
+"ZSF_01_VAL_01_C367_CV"
+],
 "VERSION":0,
 "ANNOREF_EVALUATION_ERROR":""
 }

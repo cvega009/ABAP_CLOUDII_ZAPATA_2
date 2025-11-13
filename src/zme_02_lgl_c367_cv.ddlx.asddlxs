@@ -1,0 +1,32 @@
+@Metadata.layer: #LOCALIZATION
+annotate entity ZCDS_45_LOG_C367_CV with
+{
+  @UI.dataFieldDefault: [{ importance: #HIGH }]
+  @UI.lineItem: [{ position: 30}]
+  @EndUserText.label: 'Customer ID'
+  CustomerId;
+
+
+//CORE
+//  @UI.dataFieldDefault: [{ importance: #MEDIUM }]
+//  @UI.lineItem: [{ position: 10,
+//                   type: #FOR_ACTION, dataAction: 'sendInvoiceToCustomer' }]
+//  CustomerId;
+  
+  //-------------------------------------------------------------------------
+//  Determinación final
+//  
+// parameters
+//    @EndUserText.label: 'PostalCode'
+//    pPostalCode
+//
+//  @UI.dataFieldDefault: [{ importance: #HIGH }]
+//  @UI.lineItem: [{ position: 30, type: #FOR_ACTION, dataAction: 'sendInvoiceToCustomer' }]
+//  @EndUserText.label: 'Customer ID'
+//
+//  @UI.dataFieldDefault: [{ importance: #MEDIUM }]
+//  @UI.lineItem: [{ position: 20,
+//                   type: #FOR_ACTION, dataAction: 'sendInvoiceToCustomer' }]
+//  FirstName;
+
+}

@@ -1,0 +1,7 @@
+@EndUserText.label: 'Aspecto de usuario'
+@MappingRole: true
+define role ZAC_LGL_11_C367_CV {
+    grant select on ZCDS_43_LOG_C367_CV 
+        where  CreatedBy  = aspect user;
+                        
+}

@@ -1,0 +1,5 @@
+@EndUserText.label: 'Virtual Element'
+define service ZSD_56_LOG_C367_CV {
+  expose ZCDS_56_LOG_C367_CV as Booking;
+  expose ZCDS_58_LOG_C367_CV as BookingBO;
+}

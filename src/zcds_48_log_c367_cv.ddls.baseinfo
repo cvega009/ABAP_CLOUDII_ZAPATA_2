@@ -3,10 +3,13 @@
 {
 "FROM":
 [
-"ZUSERS_C367_CV"
+"ZCOUNTRT_C367_CV"
 ],
 "ASSOCIATED":
-[],
+[
+"I_LANGUAGE",
+"ZCDS_49_LOG_C367_CV"
+],
 "BASE":
 [],
 "ANNO_REF":

@@ -1,0 +1,9 @@
+@EndUserText.label: 'Uso de Aspecto Personalizado'
+@MappingRole: true
+define role ZAC_LGL_10_C367_CV {
+    grant  select on ZCDS_42_LOG_C367_CV
+        where
+        (Plant, InvoiceId ) = 
+        aspect ZASP_LGL_C367_CV;
+                        
+}

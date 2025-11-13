@@ -1,0 +1,11 @@
+@EndUserText.label: 'Expresiones de Host'
+@MappingRole: true
+define role ZAC_LGL_12_C367_CV {
+    grant select on  ZCDS_44_LOG_C367_CV
+                    where
+                    ( $parameters.pPlant) = aspect pfcg_auth(ZAOCC367CV, ZAFCC367CV, ACTVT = '03')
+                    and $session.system_language = 'E'
+                    or ( '1010' ) = aspect pfcg_auth(ZAOCC367CV, ZAFCC367CV, ACTVT = '03');
+//                        $parameters.pPlant = '1010';
+                        
+}

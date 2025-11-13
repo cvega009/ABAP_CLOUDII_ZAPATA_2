@@ -3,10 +3,10 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZCDS_41_LOG_C367_CV</DDLNAME>
+    <DDLNAME>ZTF_01_LOG_C367_CV</DDLNAME>
     <DDLANGUAGE>S</DDLANGUAGE>
-    <DDTEXT>Access Control – Auditoría</DDTEXT>
-    <SOURCE_TYPE>W</SOURCE_TYPE>
+    <DDTEXT>Table Function</DDTEXT>
+    <SOURCE_TYPE>F</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

@@ -1,0 +1,9 @@
+define accesspolicy ZASP_LGL_C367_CV {
+    @EndUserText.label: 'Política de Acceso – Aspecto Personalizado'
+    define aspect ZASP_LGL_C367_CV as
+        select from ZCDS_41_LOG_C367_CV with user element UserId
+            { Plant,
+               InvoiceId              
+            }
+            
+}

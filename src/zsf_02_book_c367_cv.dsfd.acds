@@ -1,0 +1,7 @@
+define scalar function ZSF_02_BOOK_C367_CV
+  with parameters
+    pCountryCode  : abap.char(3),
+    pBookingPrice: abap.curr(16,2)
+      with reference type #CUKY
+  returns abap.curr(16,2)
+    with reference type of pBookingPrice;

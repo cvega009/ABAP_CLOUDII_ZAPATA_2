@@ -3,10 +3,12 @@
 {
 "FROM":
 [
-"ZUSERS_C367_CV"
+"/DMO/CUSTOMER"
 ],
 "ASSOCIATED":
-[],
+[
+"ZCDS_49_LOG_C367_CV"
+],
 "BASE":
 [],
 "ANNO_REF":

@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZCDS_41_LOG_C367_CV</DDLNAME>
+    <DDLNAME>ZCDS_48_LOG_C367_CV</DDLNAME>
     <DDLANGUAGE>S</DDLANGUAGE>
-    <DDTEXT>Access Control – Auditoría</DDTEXT>
+    <DDTEXT>Searchable</DDTEXT>
     <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>

@@ -1,0 +1,22 @@
+@Metadata.layer:  #CORE
+
+//1.- CUSTOMER
+//2-. PARTNER
+//3.- INDUSTRY
+//4.- LOCALIZATION
+//5.- CORE
+annotate entity ZCDS_45_LOG_C367_CV with
+ parameters
+    @EndUserText.label: 'PostalCode'
+    pPostalCode
+{
+  @UI.dataFieldDefault: [{ importance: #MEDIUM }]
+  @UI.lineItem: [{ position: 10,
+                   type: #FOR_ACTION, dataAction: 'sendInvoiceToCustomer' }]
+  CustomerId;
+
+  @UI.dataFieldDefault: [{ importance: #MEDIUM }]
+  @UI.lineItem: [{ position: 20,
+                   type: #FOR_ACTION, dataAction: 'sendInvoiceToCustomer' }]
+  FirstName;
+}
