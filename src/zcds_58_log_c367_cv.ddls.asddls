@@ -20,3 +20,5 @@ define root view entity ZCDS_58_LOG_C367_CV
   virtual DiscountedPrice : abap.curr( 16, 2 ),
           CurrencyCode
 }
+//where
+//    InvoiceStatus is initial;

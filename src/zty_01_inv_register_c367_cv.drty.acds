@@ -1,0 +1,2 @@
+@EndUserText.label: 'Invoice Register'
+define type ZTY_01_INV_REGISTER_C367_CV: /dmo/booking_id;
