@@ -1,0 +1,4 @@
+@EndUserText.label: 'Travel - Service Definition'
+define service ZSD_TRA_C367_CV {
+  expose ZTRA_C367_C_CV as Travel;
+}
