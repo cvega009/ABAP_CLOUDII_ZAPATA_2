@@ -9,7 +9,11 @@ CLASS zcl_country_lgl_c367_cv DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_country_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_COUNTRY_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
     DELETE FROM zcountry_c367_cv.
@@ -41,5 +45,4 @@ CLASS zcl_country_lgl_c367_cv IMPLEMENTATION.
     out->write( |Text...{ sy-dbcnt } rows inserted.| ).
 
   ENDMETHOD.
-
 ENDCLASS.

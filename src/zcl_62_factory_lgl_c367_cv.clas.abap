@@ -13,7 +13,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_62_factory_lgl_c367_cv IMPLEMENTATION.
+CLASS ZCL_62_FACTORY_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD get_shape.
 
     CASE iv_shape_type.

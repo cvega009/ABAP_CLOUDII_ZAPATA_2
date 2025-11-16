@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_priviledge_access_c367_cv IMPLEMENTATION.
+CLASS ZCL_PRIVILEDGE_ACCESS_C367_CV IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
     SELECT FROM zcds_38_log_c367_cv

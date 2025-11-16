@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_query_prov_log_c367_cv IMPLEMENTATION.
+CLASS ZCL_QUERY_PROV_LOG_C367_CV IMPLEMENTATION.
+
+
   METHOD if_rap_query_provider~select.
 
     DATA: lt_results TYPE TABLE OF zcds_20_log_c367_cv.
@@ -46,5 +48,4 @@ CLASS zcl_query_prov_log_c367_cv IMPLEMENTATION.
     ENDTRY.
 
   ENDMETHOD.
-
 ENDCLASS.

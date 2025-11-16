@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_01_exec_lgl_c367_cv IMPLEMENTATION.
+CLASS ZCL_01_EXEC_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
 **********************************************************************
@@ -86,5 +88,4 @@ CLASS zcl_01_exec_lgl_c367_cv IMPLEMENTATION.
 *    out->write( go_singleton_2->time ).
 
   ENDMETHOD.
-
 ENDCLASS.

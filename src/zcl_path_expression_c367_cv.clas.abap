@@ -12,7 +12,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_path_expression_c367_cv IMPLEMENTATION.
+CLASS ZCL_PATH_EXPRESSION_C367_CV IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
     SELECT FROM zcds_19_log_c367_cv AS Booking
@@ -30,5 +32,4 @@ CLASS zcl_path_expression_c367_cv IMPLEMENTATION.
       out->write( lt_booking ).
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

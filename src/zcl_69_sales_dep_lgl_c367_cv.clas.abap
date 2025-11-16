@@ -10,9 +10,12 @@ CLASS zcl_69_sales_dep_lgl_c367_cv DEFINITION INHERITING FROM zcl_67_observer_lg
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_69_sales_dep_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_69_SALES_DEP_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD on_modified_state.
     me->state = ev_new_state.
   ENDMETHOD.
-
 ENDCLASS.

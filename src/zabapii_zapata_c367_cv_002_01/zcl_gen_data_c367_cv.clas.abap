@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_gen_data_c367_cv IMPLEMENTATION.
+CLASS ZCL_GEN_DATA_C367_CV IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
     DELETE FROM ztra_c367_a_cv.
     DELETE FROM ztra_c367_d_cv.
@@ -44,5 +46,4 @@ CLASS zcl_gen_data_c367_cv IMPLEMENTATION.
       out->write( |Travel......{ sy-dbcnt } rows inserted.| ).
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

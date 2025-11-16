@@ -11,7 +11,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_employee_lgl_c367_cv IMPLEMENTATION.
+CLASS ZCL_EMPLOYEE_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
 
@@ -31,5 +33,4 @@ CLASS zcl_employee_lgl_c367_cv IMPLEMENTATION.
 
 
   ENDMETHOD.
-
 ENDCLASS.

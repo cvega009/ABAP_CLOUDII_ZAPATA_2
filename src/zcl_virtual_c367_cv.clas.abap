@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_virtual_c367_cv IMPLEMENTATION.
+CLASS ZCL_VIRTUAL_C367_CV IMPLEMENTATION.
+
 
   METHOD if_sadl_exit_calc_element_read~get_calculation_info.
     CASE iv_entity.
@@ -29,6 +30,7 @@ CLASS zcl_virtual_c367_cv IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD if_sadl_exit_calc_element_read~calculate.
     DATA: lt_original_data TYPE STANDARD TABLE OF zcds_56_log_c367_cv WITH DEFAULT KEY.
 
@@ -43,5 +45,4 @@ CLASS zcl_virtual_c367_cv IMPLEMENTATION.
     ct_calculated_data = CORRESPONDING #( lt_original_data ).
 
   ENDMETHOD.
-
 ENDCLASS.

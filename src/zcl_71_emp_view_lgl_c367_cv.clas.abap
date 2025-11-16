@@ -12,7 +12,11 @@ CLASS zcl_71_emp_view_lgl_c367_cv DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_71_emp_view_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_71_EMP_VIEW_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD display_employee.
     io_out->write( |{ iv_name }---{ iv_role }| ).
   ENDMETHOD.

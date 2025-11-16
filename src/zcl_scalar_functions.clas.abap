@@ -16,7 +16,11 @@ CLASS zcl_scalar_functions DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_scalar_functions IMPLEMENTATION.
+
+
+CLASS ZCL_SCALAR_FUNCTIONS IMPLEMENTATION.
+
+
   METHOD vat_by_airline BY DATABASE FUNCTION FOR HDB
                          LANGUAGE SQLSCRIPT
                          OPTIONS READ-ONLY.
@@ -28,6 +32,7 @@ CLASS zcl_scalar_functions IMPLEMENTATION.
 
   endmethod.
 
+
   METHOD booking_price_by_country BY DATABASE FUNCTION FOR HDB
                          LANGUAGE SQLSCRIPT
                          OPTIONS READ-ONLY.
@@ -38,5 +43,4 @@ CLASS zcl_scalar_functions IMPLEMENTATION.
     end if;
 
   endmethod.
-
 ENDCLASS.

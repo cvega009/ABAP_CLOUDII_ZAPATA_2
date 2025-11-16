@@ -10,7 +10,9 @@ CLASS zcl_invoice_gen_lgl_c367_cv DEFINITION
 ENDCLASS.
 
 
-CLASS zcl_invoice_gen_lgl_c367_cv IMPLEMENTATION.
+
+CLASS ZCL_INVOICE_GEN_LGL_C367_CV IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
     out->write( cl_abap_context_info=>get_user_technical_name(  )  ).
@@ -81,5 +83,4 @@ CLASS zcl_invoice_gen_lgl_c367_cv IMPLEMENTATION.
                                                   ) ).
 
   ENDMETHOD.
-
 ENDCLASS.

@@ -13,7 +13,11 @@ CLASS zcl_61_triangule_lgl_c367_cv DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_61_triangule_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_61_TRIANGULE_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD draw_shape.
     rv_shape = 'Triangle'.
   ENDMETHOD.

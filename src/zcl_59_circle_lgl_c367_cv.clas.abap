@@ -13,7 +13,11 @@ CLASS zcl_59_circle_lgl_c367_cv DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_59_circle_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_59_CIRCLE_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD draw_shape.
     rv_shape = 'Circle'.
   ENDMETHOD.

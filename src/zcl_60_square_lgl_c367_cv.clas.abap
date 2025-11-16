@@ -13,7 +13,11 @@ CLASS zcl_60_square_lgl_c367_cv DEFINITION
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_60_square_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_60_SQUARE_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD draw_shape.
     rv_shape = 'Square'.
   ENDMETHOD.

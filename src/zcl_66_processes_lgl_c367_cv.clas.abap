@@ -14,14 +14,18 @@ CLASS zcl_66_processes_lgl_c367_cv DEFINITION
     DATA: current_state TYPE string.
 ENDCLASS.
 
-CLASS zcl_66_processes_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_66_PROCESSES_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD get_state.
     rv_state = me->current_state.
   ENDMETHOD.
+
 
   METHOD set_state.
     me->current_state = iv_state.
     RAISE EVENT modified_state EXPORTING ev_new_state = me->current_state.
   ENDMETHOD.
-
 ENDCLASS.

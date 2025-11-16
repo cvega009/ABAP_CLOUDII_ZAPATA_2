@@ -18,18 +18,25 @@ CLASS zcl_72_emp_controller_c367_cv DEFINITION
 
 ENDCLASS.
 
-CLASS zcl_72_emp_controller_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_72_EMP_CONTROLLER_C367_CV IMPLEMENTATION.
+
+
   METHOD get_model.
     ro_model = me->model.
   ENDMETHOD.
+
 
   METHOD set_model.
     me->model = io_model.
   ENDMETHOD.
 
+
   METHOD get_view.
     ro_view = me->view.
   ENDMETHOD.
+
 
   METHOD set_view.
     me->view = io_view.

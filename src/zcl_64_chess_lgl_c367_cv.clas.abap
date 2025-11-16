@@ -12,21 +12,27 @@ CLASS zcl_64_chess_lgl_c367_cv DEFINITION INHERITING FROM zcl_63_play_lgl_c367_c
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_64_chess_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_64_CHESS_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD create_game.
 
   ENDMETHOD.
+
 
   METHOD end_game.
 
   ENDMETHOD.
 
+
   METHOD initialize_game.
 
   ENDMETHOD.
 
+
   METHOD print_winner.
 
   ENDMETHOD.
-
 ENDCLASS.

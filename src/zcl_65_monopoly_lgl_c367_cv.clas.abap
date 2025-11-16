@@ -14,21 +14,25 @@ ENDCLASS.
 
 
 
-CLASS zcl_65_monopoly_lgl_c367_cv IMPLEMENTATION.
+CLASS ZCL_65_MONOPOLY_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD create_game.
 
   ENDMETHOD.
+
 
   METHOD end_game.
 
   ENDMETHOD.
 
+
   METHOD initialize_game.
 
   ENDMETHOD.
 
+
   METHOD print_winner.
 
   ENDMETHOD.
-
 ENDCLASS.

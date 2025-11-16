@@ -20,7 +20,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_58_singleton_lgl_c367_cv IMPLEMENTATION.
+CLASS ZCL_58_SINGLETON_LGL_C367_CV IMPLEMENTATION.
+
 
   METHOD get_instance.
 
@@ -32,8 +33,8 @@ CLASS zcl_58_singleton_lgl_c367_cv IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD constructor.
     me->time = cl_abap_context_info=>get_system_time( ).
   ENDMETHOD.
-
 ENDCLASS.

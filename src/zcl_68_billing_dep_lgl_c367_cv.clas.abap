@@ -10,9 +10,12 @@ CLASS zcl_68_billing_dep_lgl_c367_cv DEFINITION INHERITING FROM zcl_67_observer_
   PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_68_billing_dep_lgl_c367_cv IMPLEMENTATION.
+
+
+CLASS ZCL_68_BILLING_DEP_LGL_C367_CV IMPLEMENTATION.
+
+
   METHOD on_modified_state.
     me->state = ev_new_state.
   ENDMETHOD.
-
 ENDCLASS.
