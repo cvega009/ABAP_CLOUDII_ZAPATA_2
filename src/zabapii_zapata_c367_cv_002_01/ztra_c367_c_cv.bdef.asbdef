@@ -1,0 +1,24 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZTRA_C367_C_CV alias Travel
+{
+// Que es lo que se expone
+  use create;
+  use update;
+  use delete;
+
+  use action acceptTravel;
+  use action rejectTravel;
+  use action deductDiscount;
+  use action validateCustomerID;
+  use action validateAgencyID;
+  use action validateDates;
+
+  use action Resume;
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Prepare;
+}
