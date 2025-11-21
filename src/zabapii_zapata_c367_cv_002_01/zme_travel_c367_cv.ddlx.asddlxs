@@ -90,8 +90,9 @@ annotate entity ZTRA_C367_C_CV with
          identification: [{ position: 30 }]
           }
   @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Customer_StdVH',
-                                                 element: 'CustomerID'},
-                                       useForValidation: true }]
+                                                 element: 'CustomerID' },     //}]                                                
+                                       useForValidation: true }
+                                      ]
   CustomerID;
 
   @UI: { lineItem: [{ position: 40,

@@ -52,12 +52,186 @@ ENDCLASS.
 CLASS lhc_Travel IMPLEMENTATION.
 
   METHOD get_instance_features.
+
+*keys para todas las entradas
+*failed para devolver los posibles fallos
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+    ENTITY Travel
+    FIELDS ( OverallStatus )
+    WITH CORRESPONDING #( keys )
+    RESULT DATA(travels)
+    FAILED failed.
+
+    result = VALUE #( FOR travel IN travels (
+                             %tky = travel-%tky
+                             %field-BookingFee = COND #( WHEN travel-OverallStatus = travel_status-accepted
+                                                         THEN if_abap_behv=>fc-f-read_only
+                                                         ELSE if_abap_behv=>fc-f-unrestricted )
+*                            Habilitar la condiciones de los botones
+                             %action-acceptTravel = COND #( WHEN travel-OverallStatus = travel_status-accepted
+                                                            THEN if_abap_behv=>fc-o-disabled
+                                                            ELSE if_abap_behv=>fc-o-enabled )
+                             %action-rejectTravel = COND #( WHEN travel-OverallStatus = travel_status-rejected
+                                                            THEN if_abap_behv=>fc-o-disabled
+                                                            ELSE if_abap_behv=>fc-o-enabled )
+                             %action-deductDiscount = COND #( WHEN travel-OverallStatus = travel_status-accepted
+                                                              THEN if_abap_behv=>fc-o-disabled
+                                                              ELSE if_abap_behv=>fc-o-enabled )
+    ) ).
+
   ENDMETHOD.
 
   METHOD get_instance_authorizations.
+
+
+    DATA: update_requested TYPE abap_bool,
+          update_granted   TYPE abap_bool,
+          delete_requested TYPE abap_bool,
+          delete_granted   TYPE abap_bool.
+
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+         ENTITY Travel
+         FIELDS ( AgencyID )
+         WITH CORRESPONDING #( keys )
+         RESULT DATA(travels)
+         FAILED failed.
+
+    update_requested = COND #( WHEN requested_authorizations-%update      = if_abap_behv=>mk-on
+                                 OR requested_authorizations-%action-Edit = if_abap_behv=>mk-on
+                               THEN abap_true
+                               ELSE abap_false ).
+
+    delete_requested = COND #( WHEN requested_authorizations-%delete = if_abap_behv=>mk-on
+                               THEN abap_true
+                               ELSE abap_false ).
+
+    DATA(lv_technical_name) = cl_abap_context_info=>get_user_technical_name(  ).
+
+    LOOP AT travels INTO DATA(travel). "70021
+*
+      IF travel-AgencyID IS NOT INITIAL.
+
+        IF update_requested EQ abap_true.
+          IF lv_technical_name EQ 'CB9980002770' ."AND
+*             travel-AgencyID NE '70001'. "REPLACE WITH BUSINESS LOGIC
+            update_granted = abap_true.
+          ELSE.
+*
+            update_granted = abap_false.
+*
+*            APPEND VALUE #( %tky = travel-%tky
+*                            %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized_for_agencyid
+*                                                                agency_id = travel-AgencyID
+*                                                                severity  = if_abap_behv_message=>severity-error )
+*                            %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
+          ENDIF.
+        ENDIF.
+*
+        IF delete_requested EQ abap_true.
+          IF lv_technical_name EQ 'CB9980002770' ."AND travel-AgencyID NE '70001'.
+            delete_granted = abap_true.
+          ELSE.
+            delete_granted = abap_false.
+
+*            APPEND VALUE #( %tky = travel-%tky
+*                            %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized_for_agencyid
+*                                                                agency_id = travel-AgencyID
+*                                                                severity  = if_abap_behv_message=>severity-error )
+*                            %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
+
+          ENDIF.
+        ENDIF.
+
+      ELSE.
+
+        IF lv_technical_name EQ 'CB9980002770'.
+          update_granted = abap_true.
+        ENDIF.
+*
+*        IF update_granted = abap_false.
+*
+*          APPEND VALUE #( %tky = travel-%tky
+*                          %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized
+*                                                              severity  = if_abap_behv_message=>severity-error )
+*                          %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
+*
+*        ENDIF.
+*
+      ENDIF.
+*
+      APPEND VALUE #( LET upd_auth = COND #( WHEN update_granted EQ abap_true
+                                             THEN if_abap_behv=>auth-allowed
+                                             ELSE if_abap_behv=>auth-unauthorized )
+                          del_auth = COND #( WHEN delete_granted EQ abap_true
+                                             THEN if_abap_behv=>auth-allowed
+                                             ELSE if_abap_behv=>auth-unauthorized )
+                      IN
+                      %tky         = travel-%tky
+                      %update      = upd_auth
+                      %action-Edit = upd_auth
+                      %delete      = del_auth
+                      ) TO result.
+
+    ENDLOOP.
+
   ENDMETHOD.
 
   METHOD get_global_authorizations.
+
+
+    DATA(lv_technical_name) = cl_abap_context_info=>get_user_technical_name(  ).
+
+*    lv_technical_name = 'DIFFERENT_USER'.
+
+    IF requested_authorizations-%create EQ if_abap_behv=>mk-on.
+
+      IF lv_technical_name EQ 'CB9980002770'.
+        result-%create = if_abap_behv=>auth-allowed.
+      ELSE.
+        result-%create = if_abap_behv=>auth-unauthorized.
+
+*        APPEND VALUE #( %msg   = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
+*                                                            severity = if_abap_behv_message=>severity-error )
+*                        %global = if_abap_behv=>mk-on ) TO reported-travel.
+
+      ENDIF.
+
+    ENDIF.
+
+    IF requested_authorizations-%update      EQ if_abap_behv=>mk-on OR
+       requested_authorizations-%action-Edit EQ if_abap_behv=>mk-on.
+
+      IF lv_technical_name EQ 'CB9980002770'.
+        result-%update      = if_abap_behv=>auth-allowed.
+        result-%action-Edit = if_abap_behv=>auth-allowed.
+      ELSE.
+        result-%update      = if_abap_behv=>auth-unauthorized.
+        result-%action-Edit = if_abap_behv=>auth-unauthorized.
+
+*        APPEND VALUE #( %msg = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
+*                                                            severity = if_abap_behv_message=>severity-error )
+*                                   %global = if_abap_behv=>mk-on ) TO reported-travel.
+
+      ENDIF.
+
+    ENDIF.
+
+    IF requested_authorizations-%delete EQ if_abap_behv=>mk-on.
+
+      IF lv_technical_name EQ 'CB9980002770'.
+        result-%delete = if_abap_behv=>auth-allowed.
+      ELSE.
+        result-%delete = if_abap_behv=>auth-unauthorized.
+
+*        APPEND VALUE #( %msg = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
+*                                                            severity = if_abap_behv_message=>severity-error )
+*                                   %global = if_abap_behv=>mk-on ) TO reported-travel.
+      ENDIF.
+
+    ENDIF.
+
+
+
   ENDMETHOD.
 
   METHOD acceptTravel.
@@ -85,25 +259,25 @@ CLASS lhc_Travel IMPLEMENTATION.
 
     DATA travels_for_update TYPE TABLE FOR UPDATE ztra_c367_r_cv.
 
-*    DATA(keys_valid_discount) = keys.
+    DATA(keys_valid_discount) = keys.
+
+    LOOP AT keys_valid_discount ASSIGNING FIELD-SYMBOL(<key_valid_discount>)
+         WHERE %param-discount_percent IS INITIAL
+            OR %param-discount_percent > 100
+            OR %param-discount_percent <= 0.
+
+      APPEND VALUE #( %tky = <key_valid_discount>-%tky ) TO failed-travel.
+
+      APPEND VALUE #( %tky = <key_valid_discount>-%tky
+                      %msg = NEW /dmo/cm_flight_messages( textid   = /dmo/cm_flight_messages=>discount_invalid
+                                                          severity = if_abap_behv_message=>severity-error )
+                      %op-%action-deductDiscount = if_abap_behv=>mk-on ) TO reported-travel.
+
+      DATA(lv_error) = abap_true.
+
+    ENDLOOP.
 *
-*    LOOP AT keys_valid_discount ASSIGNING FIELD-SYMBOL(<key_valid_discount>)
-*         WHERE %param-discount_percent IS INITIAL
-*            OR %param-discount_percent > 100
-*            OR %param-discount_percent <= 0.
-*
-*      APPEND VALUE #( %tky = <key_valid_discount>-%tky ) TO failed-travel.
-*
-*      APPEND VALUE #( %tky = <key_valid_discount>-%tky
-*                      %msg = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>discount_invalid
-*                                                          severity = if_abap_behv_message=>severity-error )
-*                      %op-%action-deductDiscount = if_abap_behv=>mk-on ) TO reported-travel.
-*
-*      DATA(lv_error) = abap_true.
-*
-*    ENDLOOP.
-*
-*    CHECK lv_error NE abap_true.
+    CHECK lv_error NE abap_true.
 
     READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
            ENTITY Travel
@@ -173,12 +347,188 @@ CLASS lhc_Travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD validateAgency.
+
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+         ENTITY Travel
+         FIELDS ( AgencyID )
+         WITH CORRESPONDING #( keys )
+         RESULT DATA(travels).
+
+    DATA agencies TYPE SORTED TABLE OF /dmo/agency WITH UNIQUE KEY client agency_id.
+
+    agencies = CORRESPONDING #( travels DISCARDING DUPLICATES MAPPING agency_id = AgencyID EXCEPT * ).
+    DELETE agencies WHERE agency_id IS INITIAL.
+
+    IF agencies IS NOT INITIAL.
+
+      SELECT FROM /dmo/agency AS ddbb
+             INNER JOIN @agencies AS http_req ON ddbb~agency_id EQ http_req~agency_id
+             FIELDS ddbb~agency_id
+             INTO TABLE @DATA(valid_agencies).
+
+    ENDIF.
+
+    LOOP AT travels INTO DATA(travel).
+
+*      APPEND VALUE #(  %tky                 = travel-%tky
+*                       %state_area          = 'VALIDATE_AGENCY'
+*                     ) TO reported-travel.
+
+      IF travel-AgencyID IS INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky        = travel-%tky
+*                        %state_area = 'VALIDATE_AGENCY'
+                        %msg = NEW /dmo/cm_flight_messages( textid   = /dmo/cm_flight_messages=>enter_agency_id
+                                                            severity = if_abap_behv_message=>severity-error )
+                        %element-AgencyID = if_abap_behv=>mk-on
+                               ) TO reported-travel.
+
+      ELSEIF travel-AgencyID IS NOT INITIAL AND NOT line_exists( valid_agencies[ agency_id = travel-AgencyID ] ).
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky = travel-%tky
+*                        %state_area = 'VALIDATE_AGENCY'
+                        %msg = NEW /dmo/cm_flight_messages( textid   = /dmo/cm_flight_messages=>agency_unkown
+                                                            agency_id = travel-AgencyID
+                                                            severity = if_abap_behv_message=>severity-error )
+                        %element-AgencyID = if_abap_behv=>mk-on
+                                  ) TO reported-travel.
+
+      ENDIF.
+
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD validateCustomer.
+
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+              ENTITY Travel
+              FIELDS ( CustomerID )
+              WITH CORRESPONDING #( keys )
+              RESULT DATA(travels).
+
+    DATA customers TYPE SORTED TABLE OF /dmo/customer WITH UNIQUE KEY client customer_id.
+
+    customers = CORRESPONDING #( travels DISCARDING DUPLICATES MAPPING customer_id = CustomerID EXCEPT * ).
+    DELETE customers WHERE customer_id IS INITIAL.
+
+    IF customers IS NOT INITIAL.
+
+      SELECT FROM /dmo/customer AS ddbb
+             INNER JOIN @customers AS http_req ON ddbb~customer_id EQ http_req~customer_id
+             FIELDS ddbb~customer_id
+             INTO TABLE @DATA(valid_customers).
+
+    ENDIF.
+
+    LOOP AT travels INTO DATA(travel).
+
+*      APPEND VALUE #(  %tky                 = travel-%tky
+*                       %state_area          = 'VALIDATE_CUSTOMER'
+*                     ) TO reported-travel.
+
+      IF travel-CustomerID IS INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky = travel-%tky
+*                        %state_area = 'VALIDATE_CUSTOMER'
+                        %msg = NEW /dmo/cm_flight_messages( textid   = /dmo/cm_flight_messages=>enter_customer_id
+                                                            severity = if_abap_behv_message=>severity-error )
+                        %element-CustomerID = if_abap_behv=>mk-on
+                                  ) TO reported-travel.
+
+      ELSEIF travel-CustomerID IS NOT INITIAL AND NOT line_exists( valid_customers[ customer_id = travel-CustomerID ] ).
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky = travel-%tky
+*                        %state_area = 'VALIDATE_CUSTOMER'
+                        %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>customer_unkown
+                                                            customer_id = travel-CustomerID
+                                                            severity    = if_abap_behv_message=>severity-error )
+                        %element-CustomerID = if_abap_behv=>mk-on
+                                  ) TO reported-travel.
+
+      ENDIF.
+
+    ENDLOOP.
+
   ENDMETHOD.
 
   METHOD validateDateRange.
+
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+             ENTITY Travel
+             FIELDS ( BeginDate
+                      EndDate )
+             WITH CORRESPONDING #( keys )
+             RESULT DATA(travels).
+
+    LOOP AT travels INTO DATA(travel).
+
+      IF travel-BeginDate IS INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky = travel-%tky
+*                        %state_area = 'VALIDATE_DATES'
+                        %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>enter_begin_date
+                                                            severity    = if_abap_behv_message=>severity-error )
+                        %element-BeginDate = if_abap_behv=>mk-on
+                          ) TO reported-travel.
+
+      ENDIF.
+
+      IF travel-EndDate IS INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky = travel-%tky
+*                        %state_area = 'VALIDATE_DATES'
+                        %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>enter_end_date
+                                                            severity    = if_abap_behv_message=>severity-error )
+                        %element-EndDate = if_abap_behv=>mk-on
+                          ) TO reported-travel.
+
+      ENDIF.
+
+      IF travel-EndDate < travel-BeginDate AND travel-BeginDate IS NOT INITIAL
+                                           AND travel-EndDate IS NOT INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky = travel-%tky
+*                        %state_area = 'VALIDATE_DATES'
+                        %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>begin_date_bef_end_date
+                                                            begin_date  = travel-BeginDate
+                                                            end_date    = travel-EndDate
+                                                            severity    = if_abap_behv_message=>severity-error )
+                        %element-BeginDate = if_abap_behv=>mk-on
+                        %element-EndDate   = if_abap_behv=>mk-on
+                          ) TO reported-travel.
+
+      ENDIF.
+
+      IF travel-BeginDate < cl_abap_context_info=>get_system_date(  ) AND travel-BeginDate IS NOT INITIAL.
+
+        APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
+
+        APPEND VALUE #( %tky = travel-%tky
+*                        %state_area = 'VALIDATE_DATES'
+                        %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>begin_date_on_or_bef_sysdate
+                                                            begin_date  = travel-BeginDate
+                                                            severity    = if_abap_behv_message=>severity-error )
+                         %element-BeginDate = if_abap_behv=>mk-on
+                          ) TO reported-travel.
+
+      ENDIF.
+
+    ENDLOOP.
+
   ENDMETHOD.
 
 ENDCLASS.
