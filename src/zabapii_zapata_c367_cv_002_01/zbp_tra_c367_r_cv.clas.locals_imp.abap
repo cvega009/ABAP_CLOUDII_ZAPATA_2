@@ -118,12 +118,12 @@ CLASS lhc_Travel IMPLEMENTATION.
           ELSE.
 *
             update_granted = abap_false.
-*
-*            APPEND VALUE #( %tky = travel-%tky
-*                            %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized_for_agencyid
-*                                                                agency_id = travel-AgencyID
-*                                                                severity  = if_abap_behv_message=>severity-error )
-*                            %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
+
+            APPEND VALUE #( %tky = travel-%tky
+                            %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized_for_agencyid
+                                                                agency_id = travel-AgencyID
+                                                                severity  = if_abap_behv_message=>severity-error )
+                            %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
           ENDIF.
         ENDIF.
 *
@@ -133,11 +133,11 @@ CLASS lhc_Travel IMPLEMENTATION.
           ELSE.
             delete_granted = abap_false.
 
-*            APPEND VALUE #( %tky = travel-%tky
-*                            %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized_for_agencyid
-*                                                                agency_id = travel-AgencyID
-*                                                                severity  = if_abap_behv_message=>severity-error )
-*                            %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
+            APPEND VALUE #( %tky = travel-%tky
+                            %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized_for_agencyid
+                                                                agency_id = travel-AgencyID
+                                                                severity  = if_abap_behv_message=>severity-error )
+                            %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
 
           ENDIF.
         ENDIF.
@@ -147,15 +147,15 @@ CLASS lhc_Travel IMPLEMENTATION.
         IF lv_technical_name EQ 'CB9980002770'.
           update_granted = abap_true.
         ENDIF.
-*
-*        IF update_granted = abap_false.
-*
-*          APPEND VALUE #( %tky = travel-%tky
-*                          %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized
-*                                                              severity  = if_abap_behv_message=>severity-error )
-*                          %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
-*
-*        ENDIF.
+
+        IF update_granted = abap_false.
+
+          APPEND VALUE #( %tky = travel-%tky
+                          %msg = NEW /dmo/cm_flight_messages( textid    = /dmo/cm_flight_messages=>not_authorized
+                                                              severity  = if_abap_behv_message=>severity-error )
+                          %element-AgencyID = if_abap_behv=>mk-on ) TO reported-travel.
+
+        ENDIF.
 *
       ENDIF.
 *
@@ -190,9 +190,9 @@ CLASS lhc_Travel IMPLEMENTATION.
       ELSE.
         result-%create = if_abap_behv=>auth-unauthorized.
 
-*        APPEND VALUE #( %msg   = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
-*                                                            severity = if_abap_behv_message=>severity-error )
-*                        %global = if_abap_behv=>mk-on ) TO reported-travel.
+        APPEND VALUE #( %msg   = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
+                                                            severity = if_abap_behv_message=>severity-error )
+                        %global = if_abap_behv=>mk-on ) TO reported-travel.
 
       ENDIF.
 
@@ -208,9 +208,9 @@ CLASS lhc_Travel IMPLEMENTATION.
         result-%update      = if_abap_behv=>auth-unauthorized.
         result-%action-Edit = if_abap_behv=>auth-unauthorized.
 
-*        APPEND VALUE #( %msg = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
-*                                                            severity = if_abap_behv_message=>severity-error )
-*                                   %global = if_abap_behv=>mk-on ) TO reported-travel.
+        APPEND VALUE #( %msg = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
+                                                            severity = if_abap_behv_message=>severity-error )
+                                   %global = if_abap_behv=>mk-on ) TO reported-travel.
 
       ENDIF.
 
@@ -223,9 +223,9 @@ CLASS lhc_Travel IMPLEMENTATION.
       ELSE.
         result-%delete = if_abap_behv=>auth-unauthorized.
 
-*        APPEND VALUE #( %msg = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
-*                                                            severity = if_abap_behv_message=>severity-error )
-*                                   %global = if_abap_behv=>mk-on ) TO reported-travel.
+        APPEND VALUE #( %msg = NEW /dmo/cm_flight_messages( textid = /dmo/cm_flight_messages=>not_authorized
+                                                            severity = if_abap_behv_message=>severity-error )
+                                   %global = if_abap_behv=>mk-on ) TO reported-travel.
       ENDIF.
 
     ENDIF.
@@ -341,9 +341,51 @@ CLASS lhc_Travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD setStatusToOpen.
+
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+        ENTITY Travel
+        FIELDS ( OverallStatus )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(travels).
+
+    DELETE travels WHERE OverallStatus IS NOT INITIAL.
+
+    CHECK travels IS NOT INITIAL.
+
+    MODIFY ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+      ENTITY Travel
+      UPDATE
+      FIELDS ( OverallStatus )
+      WITH VALUE #( FOR travel IN travels ( %tky = travel-%tky
+                                            OverallStatus = travel_status-open ) ).
+
   ENDMETHOD.
 
   METHOD setTravelNumber.
+
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+        ENTITY Travel
+*        ALL FIELDS
+        FIELDS ( TravelID )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(travels).
+
+    DELETE travels WHERE TravelId IS NOT INITIAL.
+
+    CHECK travels IS NOT INITIAL.
+
+    SELECT SINGLE FROM ztra_c367_a_cv
+    FIELDS MAX( travel_id )
+      INTO @DATA(lv_max_travel_id).
+
+    MODIFY ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+      ENTITY Travel
+      UPDATE
+      FIELDS ( TravelId )
+      WITH VALUE #( FOR travel IN travels INDEX INTO i
+                                  ( %tky = travel-%tky
+                                    TravelId = lv_max_travel_id + i ) ).
+
   ENDMETHOD.
 
   METHOD validateAgency.
@@ -379,7 +421,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky        = travel-%tky
-*                        %state_area = 'VALIDATE_AGENCY'
+                        %state_area = 'VALIDATE_AGENCY'
                         %msg = NEW /dmo/cm_flight_messages( textid   = /dmo/cm_flight_messages=>enter_agency_id
                                                             severity = if_abap_behv_message=>severity-error )
                         %element-AgencyID = if_abap_behv=>mk-on
@@ -390,7 +432,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky = travel-%tky
-*                        %state_area = 'VALIDATE_AGENCY'
+                        %state_area = 'VALIDATE_AGENCY'
                         %msg = NEW /dmo/cm_flight_messages( textid   = /dmo/cm_flight_messages=>agency_unkown
                                                             agency_id = travel-AgencyID
                                                             severity = if_abap_behv_message=>severity-error )
@@ -435,7 +477,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky = travel-%tky
-*                        %state_area = 'VALIDATE_CUSTOMER'
+                        %state_area = 'VALIDATE_CUSTOMER'
                         %msg = NEW /dmo/cm_flight_messages( textid   = /dmo/cm_flight_messages=>enter_customer_id
                                                             severity = if_abap_behv_message=>severity-error )
                         %element-CustomerID = if_abap_behv=>mk-on
@@ -446,7 +488,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky = travel-%tky
-*                        %state_area = 'VALIDATE_CUSTOMER'
+                        %state_area = 'VALIDATE_CUSTOMER'
                         %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>customer_unkown
                                                             customer_id = travel-CustomerID
                                                             severity    = if_abap_behv_message=>severity-error )
@@ -475,7 +517,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky = travel-%tky
-*                        %state_area = 'VALIDATE_DATES'
+                        %state_area = 'VALIDATE_DATES'
                         %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>enter_begin_date
                                                             severity    = if_abap_behv_message=>severity-error )
                         %element-BeginDate = if_abap_behv=>mk-on
@@ -488,7 +530,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky = travel-%tky
-*                        %state_area = 'VALIDATE_DATES'
+                        %state_area = 'VALIDATE_DATES'
                         %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>enter_end_date
                                                             severity    = if_abap_behv_message=>severity-error )
                         %element-EndDate = if_abap_behv=>mk-on
@@ -502,7 +544,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky = travel-%tky
-*                        %state_area = 'VALIDATE_DATES'
+                        %state_area = 'VALIDATE_DATES'
                         %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>begin_date_bef_end_date
                                                             begin_date  = travel-BeginDate
                                                             end_date    = travel-EndDate
@@ -518,7 +560,7 @@ CLASS lhc_Travel IMPLEMENTATION.
         APPEND VALUE #( %tky = travel-%tky ) TO failed-travel.
 
         APPEND VALUE #( %tky = travel-%tky
-*                        %state_area = 'VALIDATE_DATES'
+                        %state_area = 'VALIDATE_DATES'
                         %msg = NEW /dmo/cm_flight_messages( textid      = /dmo/cm_flight_messages=>begin_date_on_or_bef_sysdate
                                                             begin_date  = travel-BeginDate
                                                             severity    = if_abap_behv_message=>severity-error )
