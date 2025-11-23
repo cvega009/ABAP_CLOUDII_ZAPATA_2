@@ -32,6 +32,12 @@ define root view entity ZTRA_C367_C_CV
           BookingFee,
           @Semantics.amount.currencyCode: 'CurrencyCode'
           TotalPrice,
+          
+          @EndUserText.label: 'VAT Included'
+          @Semantics.amount.currencyCode: 'CurrencyCode'
+          @ObjectModel.virtualElementCalculatedBy: 'ABAP:ZCL_VIRT_E_SADL_C367_CV'
+          virtual PriceWithVAT : /dmo/total_price,
+          
           CurrencyCode,
           Description,
 

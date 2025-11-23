@@ -316,6 +316,36 @@ CLASS lhc_Travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD reCalcTotalPrice.
+    READ ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+          ENTITY Travel
+          FIELDS ( BookingFee CurrencyCode )
+          WITH CORRESPONDING #( keys )
+          RESULT DATA(travels).
+
+    DELETE travels WHERE CurrencyCode IS INITIAL.
+
+    LOOP AT travels ASSIGNING FIELD-SYMBOL(<travel>).
+
+      CLEAR <travel>-TotalPrice.
+
+      SELECT SINGLE FROM /dmo/booking
+             FIELDS flight_price
+             WHERE currency_code EQ @<travel>-CurrencyCode
+             INTO @DATA(lv_flight_price).
+
+      IF sy-subrc EQ 0.
+        <travel>-TotalPrice += lv_flight_price.
+      ENDIF.
+
+      <travel>-TotalPrice += <travel>-BookingFee.
+
+    ENDLOOP.
+
+    MODIFY ENTITIES OF ztra_c367_r_cv IN LOCAL MODE
+           ENTITY Travel
+           UPDATE
+           FIELDS ( TotalPrice )
+           WITH CORRESPONDING #( travels ).
   ENDMETHOD.
 
   METHOD rejectTravel.
@@ -338,6 +368,12 @@ CLASS lhc_Travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD calculateTotalPrice.
+
+    MODIFY ENTITIES OF ztra_c367_r_cv  IN LOCAL MODE
+               ENTITY Travel
+               EXECUTE reCalcTotalPrice
+               FROM CORRESPONDING #( keys ).
+
   ENDMETHOD.
 
   METHOD setStatusToOpen.
