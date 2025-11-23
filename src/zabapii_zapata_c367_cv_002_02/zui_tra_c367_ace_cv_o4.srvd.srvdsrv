@@ -1,0 +1,11 @@
+@EndUserText: {
+  label: 'Service Definition for ZC_TRA_C367_ACE_CV'
+}
+@ObjectModel: {
+  leadingEntity: {
+    name: 'ZC_TRA_C367_ACE_CV'
+  }
+}
+define service ZUI_TRA_C367_ACE_CV_O4 provider contracts odata_v4_ui {
+  expose ZC_TRA_C367_ACE_CV as Travel;
+}

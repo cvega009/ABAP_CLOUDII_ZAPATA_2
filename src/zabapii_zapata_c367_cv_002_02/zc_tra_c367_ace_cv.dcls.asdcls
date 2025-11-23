@@ -1,0 +1,6 @@
+@EndUserText.label: 'ZC_TRA_C367_ACE_CV'
+@MappingRole: true
+define role ZC_TRA_C367_ACE_CV {
+  grant select on ZC_TRA_C367_ACE_CV
+  where INHERITING CONDITIONS FROM ENTITY ZR_TRA_C367_ACE_CV REPLACING { ROOT WITH _BaseEntity };
+}

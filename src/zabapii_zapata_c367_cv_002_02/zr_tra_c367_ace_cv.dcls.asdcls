@@ -1,0 +1,6 @@
+@EndUserText.label: 'ZR_TRA_C367_ACE_CV'
+@MappingRole: true
+define role ZR_TRA_C367_ACE_CV {
+  grant select on ZR_TRA_C367_ACE_CV
+  where TRUE;
+}
